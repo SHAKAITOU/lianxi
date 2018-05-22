@@ -17,7 +17,8 @@ public class ShaLotoSecurityConfig extends WebSecurityConfigurerAdapter {
 	private static String[] DEFAULT_PERMIT_URL_PATTERN = 
 			new String[] {
 					UrlConstants.INDEX, 
-					UrlConstants.SANSU1, 
+					UrlConstants.SANSU1,
+					UrlConstants.SANSU2,
 					UrlConstants.JS_ALL,
 					UrlConstants.CSS_ALL,
 					UrlConstants.IMG_ALL,

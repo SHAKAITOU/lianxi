@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import sha.framework.controller.ScreenBaseController;
-import sha.work.common.UrlConstants;
-import sha.work.common.ViewConstants;
 
 /**
  * S002 Thymeleaf 
@@ -16,14 +14,21 @@ import sha.work.common.ViewConstants;
  *
  */
 @Controller
-@RequestMapping(UrlConstants.SANSU1)
 public class SansuController extends ScreenBaseController{
 
-	@RequestMapping(method=RequestMethod.GET)
+	@RequestMapping(path="/sansu1", method=RequestMethod.GET)
 	public ModelAndView exapmle(@ModelAttribute Object greeting)  {
 		
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName(ViewConstants.SANSU1);
+		mav.setViewName("lianxi/sansu1");
+		return mav;
+	}
+	
+	@RequestMapping(path="/sansu2", method=RequestMethod.GET)
+	public ModelAndView exapmle2(@ModelAttribute Object greeting)  {
+		
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("lianxi/sansu2");
 		return mav;
 	}
 

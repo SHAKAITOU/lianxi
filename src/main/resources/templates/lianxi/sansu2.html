@@ -34,23 +34,36 @@
 		text += '----------------------------------\n';
 		text += '|	'+ a1T +'と'+ a1i +'	|	'+ a2T +'と'+a2i+'	|\n';
 		text += '----------------------------------\n';
-		text += '十の位の加算：\n';
+		
+		if(a1i < a2i) {
+			text += '【'+a1+'】の十の位の数から10を借りて個の位の数にあげる：\n';
+			text += '	'+(a1T)+'    '+(a1i)+'\n';
+			text += '	-->\n';
+			a1T = a1T-10;
+			a1i = a1i+10;
+			text += '	'+(a1T)+'    '+(a1i)+'\n';
+			text += '----------------------------------\n';
+			text += '|	'+ a1T +'と'+ a1i +'	|	'+ a2T +'と'+a2i+'	|\n';
+			text += '----------------------------------\n';
+			
+		}
+		text += '十の位の減算：\n';
 		text += '----------------------------------\n';
-		text += '|	'+ a1T +'＋'+ a2T +'	=	'+ (a1T+a2T)+'		|\n';
+		text += '|	'+ a1T +'－'+ a2T +'	=	'+ (a1T-a2T)+'		|\n';
 		text += '----------------------------------\n';
-		text += '個の位の加算：\n';
+		text += '個の位の減算：\n';
 		text += '----------------------------------\n';
-		text += '|	'+ a1i +'＋'+ a2i +'	=	'+ (a1i+a2i)+'		|\n';
+		text += '|	'+ a1i +'－'+ a2i +'	=	'+ (a1i-a2i)+'		|\n';
 		text += '----------------------------------\n';
-		text += '最後十の位の加算結果と個の位の加算結果の合計：\n';
+		text += '最後十の位の減算結果と個の位の減算結果の合計：\n';
 		text += '----------------------------------\n';
-		text += '|	'+ (a1T+a2T) +'＋'+ (a1i+a2i) +'	=	'+ (a1+a2)+'		|\n';
+		text += '|	'+ (a1T-a2T) +'＋'+ (a1i-a2i) +'	=	'+ (a1-a2)+'		|\n';
 		text += '----------------------------------\n';
 		
 		
 		
 		$('#a4').text(text);
-		$('#a3').val((a1+a2));
+		$('#a3').val((a1-a2));
 		
 	}
 	
@@ -71,14 +84,14 @@ $(document).ready(function(){
 </script>
 </head>
 <body>
-	<p>100以内加算</p>
-	<input id="a1" type="number" min="0" max="99" class="form-control-sm text-right label-14b" style="width:80px;" value="23"/>
-	<span>＋</span>
-	<input id="a2" type="number" min="0" max="99" class="form-control-sm text-right label-14b" style="width:80px;" value="35"/>
+	<p>100以内減算</p>
+	<input id="a1" type="number" min="0" max="99" class="form-control-sm text-right label-14b" style="width:80px;" value="43"/>
+	<span>－</span>
+	<input id="a2" type="number" min="0" max="99" class="form-control-sm text-right label-14b" style="width:80px;" value="27"/>
 	<button id="aClk" type="button" class="keisan btn btn btn-outline-primary btn_com">＝</button>
 	<input id="a3" type="text" readonly="readonly" class="form-control-sm text-right label-14b" style="width:80px;"/>
 	<br/><br/>
 	<p>計算ステップ：</p>
-	<textarea id="a4" rows="25" cols="100"></textarea>
+	<textarea id="a4" rows="30" cols="100"></textarea>
 </body>
 </html>

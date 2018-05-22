@@ -43,6 +43,8 @@
 						<div class="col-md-10 col-md-offset-1 visible-lg visible-md hidden-xs">
 							<button type="button" 
 								class="sansu1 btn btn btn-block btn-outline-primary btn_com">100以内加算</button>
+							<button type="button" 
+								class="sansu2 btn btn btn-block btn-outline-primary btn_com">100以内減算</button>
 						</div>
 						<div class="col-md-10 col-md-offset-1 visible-lg visible-md hidden-xs">
 						</div>
@@ -92,6 +94,15 @@ $(document).ready(function(){
 		commonBtn = $(this);
 		event.preventDefault();
 		ShaCommon.ajax.get('/sansu1', null); 
+	});
+	
+	//-------------------------------------------------------	
+	$btn_obj = $('.sansu2'); 
+	$btn_obj.unbind(); 
+	$btn_obj.on('click', function(event) {
+		commonBtn = $(this);
+		event.preventDefault();
+		ShaCommon.ajax.get('/sansu2', null); 
 	});
 	
 	$("#ngPanel").hide();

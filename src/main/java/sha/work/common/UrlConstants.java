@@ -103,5 +103,6 @@ public class UrlConstants {
 	
 	
 	public static final String SANSU1 			= "/sansu1";
+	public static final String SANSU2 			= "/sansu2";
 	
 }
