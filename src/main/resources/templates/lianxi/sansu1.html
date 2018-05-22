@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+  th:with="lang=${#locale.language}" th:lang="${lang}">
+<head>
+    <title>Hanyo data import success</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+	
+	function doA(){
+		var a1 = parseInt($('#a1').val());
+		var a2 = parseInt($('#a2').val());
+		var text = '';
+		text += '----------------------------------\n';
+		text += '|	'+ a1 +'		|	'+ a2 +'		|\n';
+		text += '----------------------------------\n';
+		var a1T = 0;
+		var a1i = 0;
+		var a2T = 0;
+		var a2i = 0;
+		if(a1 > 10){
+			a1i = a1%10;
+			a1T = a1 - a1i;
+		}else{
+			a1i = a1;
+		}
+		text += '【'+a1+'】の十の位の数：'+a1T+'    個の位の数：'+a1i+'\n';
+		
+		if(a2 > 10){
+			a2i = a2%10;
+			a2T = a2 - a2i;
+		}
+		text += '【'+a2+'】の十の位の数：'+a2T+'    個の位の数：'+a2i+'\n';
+		text += '----------------------------------\n';
+		text += '|	'+ a1T +'と'+ a1i +'	|	'+ a2T +'と'+a2i+'	|\n';
+		text += '----------------------------------\n';
+		text += '十の位の加算：\n';
+		text += '----------------------------------\n';
+		text += '|	'+ a1T +'＋'+ a2T +'	=	'+ (a1T+a2T)+'		|\n';
+		text += '----------------------------------\n';
+		text += '個の位の加算：\n';
+		text += '----------------------------------\n';
+		text += '|	'+ a1i +'＋'+ a2i +'	=	'+ (a1i+a2i)+'		|\n';
+		text += '----------------------------------\n';
+		text += '最後十の位の加算結果と個の位の加算結果の加算：\n';
+		text += '----------------------------------\n';
+		text += '|	'+ (a1T+a2T) +'＋'+ (a1i+a2i) +'	=	'+ (a1+a2)+'		|\n';
+		text += '----------------------------------\n';
+		
+		
+		
+		$('#a4').text(text);
+		$('#a3').val((a1+a2));
+		
+	}
+	
+$(document).ready(function(){
+
+	//-------------------------------------------------------	
+	$btn_obj = $('#aClk'); 
+	$btn_obj.unbind(); 
+	$btn_obj.on('click', function(event) {
+		commonBtn = $(this);
+		event.preventDefault();
+		doA();
+	});
+
+});
+
+/*]]>*/
+</script>
+</head>
+<body>
+	<p>100以内加算</p>
+	<input id="a1" type="number" min="0" max="99" class="form-control-sm text-right label-14b" style="width:80px;" value="23"/>
+	<span>＋</span>
+	<input id="a2" type="number" min="0" max="99" class="form-control-sm text-right label-14b" style="width:80px;" value="35"/>
+	<button id="aClk" type="button" class="keisan btn btn btn-outline-primary btn_com">＝</button>
+	<input id="a3" type="text" readonly="readonly" class="form-control-sm text-right label-14b" style="width:80px;"/>
+	<br/><br/>
+	<p>計算ステップ：</p>
+	<textarea id="a4" rows="25" cols="100"></textarea>
+</body>
+</html>

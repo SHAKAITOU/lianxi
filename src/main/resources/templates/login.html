@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+  th:with="lang=${#locale.language}" th:lang="${lang}">
+<head>
+	<title th:text="#{common.title}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<div class="container" role="main">
+	<div class="row"><div class="col-md-12 col-xs-12 text-right" style="height: 70px;"></div></div>
+	<div class="col-md-4 col-md-offset-4 col-xs-12">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h3 class="panel-title" th:text="#{login.title}"></h3>
+			</div>
+			<div class="panel-body">
+				<form id="login_form" name="login_form" role="form" method="POST" class="form-horizontal">
+				<fieldset>
+					<div th:if="${param.error}">
+                        <div class="alert alert-danger" th:text="#{login.fail.msg}"></div>
+                    </div>
+                    <div th:if="${param.logout}">
+                        <div class="alert alert-info" th:text="#{login.logout.msg}"></div>
+                    </div>
+					<div style="margin: 0 0 10px 0;">
+						<input id="username" name="username" type="text" 
+							th:placeholder="#{login.panel.placeholder.user}" class="form-control input-md"/>
+					</div>
+					<div style="margin: 0 0 10px 0;">
+						<input id="password" name="password" type="password" 
+							th:placeholder="#{login.panel.placeholder.pw}" class="form-control input-md"/>
+					</div>
+					<a href="#"><small> Forgot Password?</small></a><br/>
+					<button id="loginBtn" name="loginBtn" 
+						class="btn btn btn-outline-primary btn_com pull-right"
+						th:text="#{login.panel.btn.login}"></button>
+				</fieldset>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>	
+<!-- /container -->
+<script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+	$(document).ready(function(){
+		//--------------------------------------------------------[
+		//init bond event to btn
+	
+		$btn_obj = $('#loginBtn'); 
+		$btn_obj.unbind(); 
+		$btn_obj.on('click', function(event) {
+			event.preventDefault();
+			var postData = $('#login_form').serializeArray();
+			if(checkValue(postData)) {
+				return;
+			}
+			
+			ShaCommon.ajax.post(
+				/*[[${T(sha.work.common.UrlConstants).USER_LOGIN}]]*/,
+				postData);  
+		});
+		
+		//when logout auto refresh index page.
+		var logoutFlg = /*[[${param.logout}]]*/ null;
+		if(logoutFlg != null) {
+			ShaCommon.restful.refeshIndex();
+		}
+	});
+	
+	
+	function checkValue() {
+		//alert(JSON.stringify(postData));
+		var objs = [
+			$('#username'), 
+			$('#password'),
+		];
+		var ttlHeads = [
+			/*[[#{login.panel.placeholder.user}]]*/,
+			/*[[#{login.panel.placeholder.pw}]]*/,
+		];
+		var msgNon = /*[[#{login.check.msg.blank}]]*/;
+		for( var i = 0; i < objs.length; i++ ){
+			if(objs[i].val() == ""){
+				ShaCommon.dialogs.alert(ttlHeads[i]+msgNon);
+				objs[i].addClass('alert-input');
+				return true;
+			} else {
+				objs[i].removeClass('alert-input');
+			}
+		}
+		
+		return false;
+	}
+
+/*]]>*/
+</script>
+
+</body>
+</html>

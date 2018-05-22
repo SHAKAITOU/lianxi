@@ -1,0 +1,164 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sha.work.mapper.loto.MiniLotoMapper">
+	<!-- RESULT MAP -->
+	<resultMap id="NumberAndTurns" 
+				type="sha.work.entity.query.NumberAndTurnsQuery">
+        
+    </resultMap>
+    
+    <resultMap id="MiniLoto" 
+				type="sha.work.dto.loto.MiniLoto">
+		<id property="turn" column="turn" />
+		<result property="openDt" column="open_dt"/>
+		<result property="l1" column="l1"/>
+		<result property="l2" column="l2"/>
+		<result property="l3" column="l3"/>
+		<result property="l4" column="l4"/>
+		<result property="l5" column="l5"/>
+		<result property="b1" column="b1"/>
+    </resultMap>
+    
+    <resultMap id="MiniLotoFiveQuery" 
+				type="sha.work.entity.query.MiniLotoFiveQuery">
+		<id property="numberName" column="value" />
+		<result property="l1Cnt" column="l1_cnt"/>
+		<result property="l2Cnt" column="l2_cnt"/>
+		<result property="l3Cnt" column="l3_cnt"/>
+		<result property="l4Cnt" column="l4_cnt"/>
+		<result property="l5Cnt" column="l5_cnt"/>
+    </resultMap>
+	
+	<!-- SQL CHIP -->
+	<sql id="selectNumber">
+		SELECT 
+			${prefix} AS numberName,
+			COUNT(*) AS numberValue
+		FROM 
+			M_MINI_LOTO
+		WHERE (l1 = ${prefix} or l2 = ${prefix} or l3 = ${prefix} or l4 = ${prefix} or l5 = ${prefix})
+	</sql>
+	
+	<sql id="selectBonusNumber1">
+		SELECT 
+			${prefix} AS numberName,
+			COUNT(*) AS numberValue
+		FROM 
+			M_MINI_LOTO
+		WHERE (B1 = ${prefix})
+	</sql>
+	
+	<!-- SELECT -->
+	<select id="getAll" resultMap="MiniLoto">
+		SELECT * FROM M_MINI_LOTO
+	</select>
+	
+	<select id="isExist" resultType="int">
+		SELECT COUNT(*) FROM M_MINI_LOTO WHERE TURN = #{turn}
+	</select>
+	
+	<select id="findByTurn" resultMap="MiniLoto">
+		SELECT * FROM M_MINI_LOTO WHERE TURN = #{turn}
+	</select>
+	
+	<select id="findLastTurn" resultMap="MiniLoto">
+		SELECT * FROM M_MINI_LOTO ORDER BY TURN DESC LIMIT 1
+	</select>
+	
+	<select id="getTotalCnt" resultType="int">
+		SELECT COUNT(*) FROM M_MINI_LOTO
+	</select>
+	
+	<select id="getPageList" resultMap="MiniLoto">
+		SELECT * FROM M_MINI_LOTO
+		WHERE
+		<choose>
+            <when test="searchTypeRadio == 0">
+            	 TO_DATE(open_dt, 'YYYY/MM/DD') &gt;= TO_DATE(#{searchDt}, 'YYYY/MM/DD')
+            </when>
+            <when test="searchTypeRadio == 1">
+            	TURN &gt;= #{searchTurnFrom}
+            </when>
+		</choose>
+		<choose>
+            <when test="orderType == 'asc'">
+			ORDER BY TURN ASC
+			</when>
+			<when test="orderType == 'desc'">
+			ORDER BY TURN DESC
+			</when>
+		</choose>
+		LIMIT #{pageCntRadio}
+	</select>
+	
+	<select id="getNomalNumberSum" resultMap="NumberAndTurns">
+		<foreach item="num" index="index" collection="miniLotoHanyo">
+			<if test="index > 0">UNION </if>
+			<include refid="selectNumber"><property name="prefix" value="${num.value}"/></include>
+		</foreach>
+		ORDER BY numberName	
+	</select>
+	
+	<select id="getBonusNumber1Sum" resultMap="NumberAndTurns">
+		<foreach item="num" index="index" collection="miniLotoHanyo">
+			<if test="index > 0">UNION </if>
+			<include refid="selectBonusNumber1"><property name="prefix" value="${index}"/></include>
+		</foreach>
+		ORDER BY numberName	
+	</select>
+	
+	<select id="getFiveSum" resultMap="MiniLotoFiveQuery">
+		SELECT
+			mh.value,
+			COALESCE(dl1.l1_cnt, 0) l1_cnt,
+			COALESCE(dl2.l2_cnt, 0) l2_cnt,
+			COALESCE(dl3.l3_cnt, 0) l3_cnt,
+			COALESCE(dl4.l4_cnt, 0) l4_cnt,
+			COALESCE(dl5.l5_cnt, 0) l5_cnt
+		FROM
+			M_HANYO mh
+		LEFT JOIN (SELECT l1, COUNT(l1) l1_cnt FROM M_MINI_LOTO GROUP BY l1) dl1 on CAST(mh.value AS integer) = dl1.l1
+		LEFT JOIN (SELECT l2, COUNT(l2) l2_cnt FROM M_MINI_LOTO GROUP BY l2) dl2 on CAST(mh.value AS integer) = dl2.l2
+		LEFT JOIN (SELECT l3, COUNT(l3) l3_cnt FROM M_MINI_LOTO GROUP BY l3) dl3 on CAST(mh.value AS integer) = dl3.l3
+		LEFT JOIN (SELECT l4, COUNT(l4) l4_cnt FROM M_MINI_LOTO GROUP BY l4) dl4 on CAST(mh.value AS integer) = dl4.l4
+		LEFT JOIN (SELECT l5, COUNT(l5) l5_cnt FROM M_MINI_LOTO GROUP BY l5) dl5 on CAST(mh.value AS integer) = dl5.l5
+		WHERE
+			mh.id = #{hanyoId}
+	</select>
+	
+	<insert id="save">
+		INSERT INTO M_MINI_LOTO
+		( 
+			TURN
+			,OPEN_DT
+			,L1
+			,L2
+			,L3
+			,L4
+			,L5
+			,B1
+		 ) VALUES (
+			#{turn}
+			, #{openDt}
+			, #{l1}
+			, #{l2}
+			, #{l3}
+			, #{l4}
+			, #{l5}
+			, #{b1}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE M_MINI_LOTO
+		SET
+			OPEN_DT = #{openDt}
+			,L1 = #{l1}
+			,L2 = #{l2}
+			,L3 = #{l3}
+			,L4 = #{l4}
+			,L5 = #{l5}
+			,B1 = #{b1}
+		WHERE
+			TURN = #{turn}
+	</update>
+</mapper>
