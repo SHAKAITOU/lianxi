@@ -31,5 +31,13 @@ public class SansuController extends ScreenBaseController{
 		mav.setViewName("lianxi/sansu2");
 		return mav;
 	}
+	
+	@RequestMapping(path="/sansu3", method=RequestMethod.GET)
+	public ModelAndView exapmle3(@ModelAttribute Object greeting)  {
+		
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("lianxi/sansu3");
+		return mav;
+	}
 
 }
